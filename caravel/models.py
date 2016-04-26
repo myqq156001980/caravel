@@ -1003,11 +1003,15 @@ class DruidDatasource(Model, AuditMixinNullable, Queryable):
             for m in self.metrics if m.metric_name in metrics
         }
         granularity = granularity or "all"
-        if granularity != "all":
-            granularity = utils.parse_human_timedelta(
-                granularity).total_seconds() * 1000
-        if not isinstance(granularity, string_types):
-            granularity = {"type": "duration", "duration": granularity}
+        #add period granularity to fix the problem where query at different timezone
+        if granularity.startswith('P'):
+            granularity = {"type": "period", "period": granularity, "timeZone": config.get("QUERY_TIME_ZONE")}
+        else:
+            if granularity != "all":
+                granularity = utils.parse_human_timedelta(
+                    granularity).total_seconds() * 1000
+            if not isinstance(granularity, string_types):
+                granularity = {"type": "duration", "duration": granularity}
 
         qry = dict(
             datasource=self.datasource_name,
