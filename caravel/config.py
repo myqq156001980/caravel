@@ -62,6 +62,9 @@ APP_NAME = "Caravel"
 DRUID_IS_ACTIVE = True
 DRUID_TZ = tz.tzutc()
 
+#the timezome you want to use granularity period query default is "GMT/UTC"
+QUERY_TIME_ZONE = "GMT/UTC"
+
 # ----------------------------------------------------
 # AUTHENTICATION CONFIG
 # ----------------------------------------------------
